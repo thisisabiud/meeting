@@ -15,7 +15,7 @@ class UserProfile(models.Model):
     description = models.CharField(max_length=50)
     avatar = models.ImageField(upload_to='users/%Y/%m/%d', blank=True)
     date_of_birth = models.DateField(auto_now_add=True)
-    gender = models.CharField(choices=Gender.choices, default=Gender.OTHER)
+    gender = models.CharField(choices=Gender.choices, default=Gender.OTHER, max_length=1)
     location = models.CharField(max_length=32)
 
     def __str__(self) -> str:
