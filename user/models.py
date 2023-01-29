@@ -2,11 +2,12 @@ from django.db import models
 
 from django.contrib.auth.models import (
     AbstractBaseUser,
-    BaseUserManager
+    BaseUserManager,
+    PermissionsMixin
 )
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, first_name, last_name, email, password=None):
+    def create_user(self,email, password=None, **extra_fields):
         """
         create user with passed parameters
         """
@@ -14,9 +15,8 @@ class CustomUserManager(BaseUserManager):
             raise ValueError("Email must be provided")
 
         user = self.model(
-            first_name = first_name,
-            last_name = last_name,
-            email = self.normalize_email(email)
+            email = self.normalize_email(email),
+            **extra_fields
         )
 
         user.set_password(password)
@@ -25,15 +25,14 @@ class CustomUserManager(BaseUserManager):
         return user
 
 
-    def create_superuser(self, first_name, last_name, email, password=None):
+    def create_superuser(self, email, password=None, **extra_fields):
         """
         creating a superuser
         """
         user = self.create_user(
-            first_name=first_name,
-            last_name=last_name,
             email=email,
-            password=password
+            password=password,
+            **extra_fields
             )
 
         user.is_admin = True
@@ -41,7 +40,7 @@ class CustomUserManager(BaseUserManager):
 
         return user
 
-class CustomUser(AbstractBaseUser):
+class CustomUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
     email = models.EmailField(max_length=100, unique=True)
@@ -64,7 +63,7 @@ class CustomUser(AbstractBaseUser):
     def has_perm(self, perm, obj=None):
         return True
 
-    def has_module_perm(self, app_label):
+    def has_module_perms(self, app_label):
         return True
 
     @property
