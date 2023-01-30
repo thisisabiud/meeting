@@ -18,7 +18,6 @@ from .models import CustomUser
 class CreateUserView(generics.CreateAPIView):
     """User creation endpoint."""
     serializer_class = UserSerializer
-    queryset = CustomUser.objects.all()
     
 
 
