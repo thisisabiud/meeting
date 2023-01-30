@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
 )
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self,email, password=None, **extra_fields):
+    def create_user(self, email, password=None, **extra_fields):
         """
         create user with passed parameters
         """
