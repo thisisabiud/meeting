@@ -8,6 +8,8 @@ from django.shortcuts import get_object_or_404
 
 
 
+
+
 class TopicListCreateView(generics.ListCreateAPIView):
     serializer_class = TopicSerializer
     queryset = Topic.objects.all()
