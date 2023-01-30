@@ -36,31 +36,49 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ('first_name', 'last_name', 'email', 'password')
         extra_kwargs = {'password':{'write_only':True, 'min_length':8}}
-        
 
 
-class AuthTokenSerializer(serializers.Serializer):
+
+# class AuthTokenSerializer(serializers.Serializer):
+#     email = serializers.EmailField()
+#     password = serializers.CharField(
+#         style={'input_type':'password'},
+#         trim_whitespace = False,
+#     )
+
+#     def validate(self, attrs):
+#         """Validate the authenticated user."""
+#         email = attrs.get('email')
+#         password = attrs.get('password')
+
+#         user = authenticate(
+#             request=self.context.get('request'),
+#             username = email,
+#             password=password,
+#         )
+
+#         if not user:
+#             message = _('Unable to authenticate user with provided credentials.')
+#             raise serializers.ValidationError(message, code='authorization')
+
+#         attrs['user'] = user
+#         return attrs
+
+
+class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(
         style={'input_type':'password'},
         trim_whitespace = False,
     )
 
-    def validate(self, attrs):
-        """Validate the authenticated user."""
-        email = attrs.get('email')
-        password = attrs.get('password')
+    def validate(self, data):
+        user = authenticate(**data)
 
-        user = authenticate(
-            request=self.context.get('request'),
-            username = email,
-            password=password,
-        )
+        if user and user.is_active:
+            return user
 
-        if not user:
-            message = _('Unable to authenticate user with provided credentials.')
-            raise serializers.ValidationError(message, code='authorization')
+        raise serializers.ValidationError("Unable to authenticate user with provided credentials.",
+                                             code='authorization')
 
-        attrs['user'] = user
-        return attrs
-
+        
