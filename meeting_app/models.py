@@ -7,9 +7,9 @@ class Topic(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     description = models.TextField()
+    is_favourite = models.BooleanField(default=False)
 
     # progress = models.IntegerField(default=0)
-    # is_favourite = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{ self.title }"
