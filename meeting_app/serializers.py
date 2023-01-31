@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Post, Topic, Comment
+from .models import Post, Topic, Comment, UserTopic
 
 from django.contrib.auth import get_user_model
 
@@ -50,3 +50,9 @@ class TopicSerializer(serializers.ModelSerializer):
     # def get_topic(self, obj):
     #     return obj
 
+class UserTopicSerializer(serializers.ModelSerializer):
+    username = serializers.StringRelatedField(source='user.fullname', read_only=True)
+    topic = serializers.StringRelatedField(source='topic.title', read_only=True)
+    class Meta:
+        model = UserTopic
+        fields = ['id', 'username', 'topic']

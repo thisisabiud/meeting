@@ -15,6 +15,6 @@ urlpatterns = [
              ),
     
     path('topics/', views.TopicListCreateView.as_view(), name='topic-list'),
-    # path('topics/<int:pk>', views.TopicRetrieveUpdateDestroyAPIView.as_view(), name='topic'),
-    # path('topics/<int:pk>/posts', views.TopicRetrieveUpdateDestroyAPIView.as_view(), name='topic'),
+    path('topics/<int:pk>', views.TopicRetrieveUpdateDestroyAPIView.as_view(), name='topic'),
+    path('topics/user', views.UserTopicView.as_view(), name='user-topic'),
 ]

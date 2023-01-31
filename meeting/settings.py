@@ -42,27 +42,18 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_framework_jwt',
     'corsheaders',
+
+    'drf_spectacular',
 
     'user.apps.UserConfig',
     'meeting_app',
-    # 'djangorestframework-jwt',
-
-
-
-
 ]
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.AllowAny',
-#     ],
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'djangorestframework_jwt.authentication.JSONWebTokenAuthentication',
-#         'rest_framework.authentication.SessionAuthentication',
-#     ),
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS':'drf_spectacular.openapi.AutoSchema',
+
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

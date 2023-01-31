@@ -37,27 +37,10 @@ class Comment(models.Model):
         return f"{ self.content }"
 
 
-
-# class Post(models.Model):
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     # photo = models.ImageField(upload_to='post/%Y/%m/%d', null=True, blank=True)
-#     title = models.CharField(max_length=50)
-#     body = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-#     is_verified = models.BooleanField(default=False)
+class UserTopic(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
 
 
-#     def __str__(self) -> str:
-#         return f"{ self.title }"
-    
-# class Post(models.Model):
-#     title = models.CharField(max_length=255)
-#     content = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-# class Comment(models.Model):
-#     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-#     content = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
-
+    def __str__(self) -> str:
+        return f"{ self.user } - { self.topic }"

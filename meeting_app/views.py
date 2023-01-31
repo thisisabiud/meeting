@@ -1,26 +1,33 @@
 from rest_framework import generics, permissions
 
-from .serializers import PostSerializer, TopicSerializer, CommentSerializer
+from .serializers import (
+    PostSerializer, TopicSerializer, 
+    CommentSerializer, UserTopicSerializer
+)
 
-from .models import Post, Topic, Comment
+from .models import Post, Topic, Comment, UserTopic
 
 from django.shortcuts import get_object_or_404
-
-
-
-
+from rest_framework.response import Response
 
 class TopicListCreateView(generics.ListCreateAPIView):
     serializer_class = TopicSerializer
     queryset = Topic.objects.all()
+
+    
+
    
-class TopicRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+class TopicRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateAPIView):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-    def perform_update(self, serializer):
-        serializer.save(user=self.request.user)
+    def post(self, request, *args, **kwargs):
+        topic = self.get_object()
+        user = request.user
+        UserTopic.objects.create(user=user, topic = topic)
+
+        return Response({'message': 'UserTopic object created successfully'})
 
 
 class PostCreateAPIView(generics.ListCreateAPIView):
@@ -67,3 +74,14 @@ class CommentCreateAPIView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         post = get_object_or_404(Post, pk=self.kwargs.get('post_pk'))
         serializer.save(user=self.request.user, post=post)
+
+
+class UserTopicView(generics.ListAPIView):
+    queryset = UserTopic.objects.all()
+    serializer_class = UserTopicSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        topics = UserTopic.objects.filter(user = self.request.user)
+
+        return topics
