@@ -6,6 +6,8 @@ from rest_framework import (
     permissions
 )
 
+from django.contrib.auth import get_user_model
+
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 from rest_framework.authtoken.models import Token
@@ -35,11 +37,12 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
         """Retrieve and return authenticated user."""
         return self.request.user
 
-class ObtainTokenAndUserDetails(generics.CreateAPIView):
+class UserDetailView(generics.RetrieveAPIView):
+    queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
     authentication_classes = (authentication.TokenAuthentication,)
+    lookup_field = 'email'
 
-    def post(self, request, *args, **kwargs):
-        serializer = UserSerializer(request.user)
-        token, created = Token.objects.get_or_create(user=request.user)
-        return Response({'token': token.key, 'user': serializer.data})
+    # def get_queryset(self):
+    #     return get_user_model().objects.filter()
+    
