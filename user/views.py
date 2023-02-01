@@ -14,7 +14,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
 from .serializers import (
-    UserSerializer, AuthTokenSerializer
+    UserSerializer, AuthTokenSerializer,
+    ProfileSerializer
     )
 
 class CreateUserView(generics.CreateAPIView):
@@ -46,3 +47,6 @@ class UserDetailView(generics.RetrieveAPIView):
     # def get_queryset(self):
     #     return get_user_model().objects.filter()
     
+class ProfileCreateAPIView(generics.CreateAPIView):
+    """Create user with profile photo"""
+    serializer_class = ProfileSerializer

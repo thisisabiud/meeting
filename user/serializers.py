@@ -3,6 +3,8 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model, authenticate
 
+from .models import Profile
+
 
 class UserSerializer(serializers.ModelSerializer):
     """User serializer class"""
@@ -64,3 +66,8 @@ class AuthTokenSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('id', 'user', 'photo')

@@ -73,5 +73,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     @property
     def fullname(self) -> str:
         return f"{ self.first_name } { self.last_name }"
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    photo = models.ImageField(upload_to='profile-photos/')
+
+    def __str__(self) -> str:
+        return self.user.fullname
     
     
