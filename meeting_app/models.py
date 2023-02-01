@@ -40,7 +40,8 @@ class Comment(models.Model):
 class UserTopic(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    progress = models.DateField(auto_now_add=True)
 
 
     def __str__(self) -> str:
-        return f"{ self.user } - { self.topic }"
+        return f"{ self.user } - { self.topic } at { self.progress }"

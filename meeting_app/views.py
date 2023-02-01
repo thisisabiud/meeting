@@ -39,6 +39,11 @@ class PostCreateAPIView(generics.ListCreateAPIView):
         topic_pk = self.kwargs.get('topic_pk')
         return Post.objects.filter(topic = topic_pk)
 
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        response.status_code = 200
+        return response
+    
     def perform_create(self, serializer):
         topic = get_object_or_404(Topic, pk=self.kwargs.get('topic_pk'))
         serializer.save(user=self.request.user, topic=topic)

@@ -55,4 +55,4 @@ class UserTopicSerializer(serializers.ModelSerializer):
     topic = serializers.StringRelatedField(source='topic.title', read_only=True)
     class Meta:
         model = UserTopic
-        fields = ['id', 'username', 'topic']
+        fields = ['id', 'username', 'topic', 'progress']
