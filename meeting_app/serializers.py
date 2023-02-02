@@ -4,6 +4,9 @@ from .models import Post, Topic, Comment, UserTopic
 
 from django.contrib.auth import get_user_model
 
+from user.serializers import UserSerializer
+
+
 
 # class CommentSerializer(serializers.ModelSerializer):
 #     user = serializers.ReadOnlyField(source='user.username')
@@ -18,6 +21,7 @@ from django.contrib.auth import get_user_model
 #         return Comment.objects.create(**validated_data)
 
 class CommentSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False, read_only=True)
     class Meta:
         model = Comment
         fields = ['content', 'user', 'post']
@@ -26,7 +30,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     queryset = Post.objects.all()
-    user = serializers.ReadOnlyField(source='user.username')
+    user = UserSerializer(many=False, read_only=True)
     # comments = CommentSerializer(many=True)
 
     class Meta:
@@ -45,7 +49,7 @@ class TopicSerializer(serializers.ModelSerializer):
     # posts = PostSerializer(many=True, topic = serializers.SerializerMethodField('get_topic'))
     class Meta:
         model = Topic
-        fields = ('id','title', 'description', 'created_by')
+        fields = ('id','title',)
 
     # def get_topic(self, obj):
     #     return obj

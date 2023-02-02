@@ -10,14 +10,14 @@ from .models import Post, Topic, Comment, UserTopic
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 
-class TopicListCreateView(generics.ListCreateAPIView):
+class TopicListCreateView(generics.ListAPIView):
     serializer_class = TopicSerializer
     queryset = Topic.objects.all()
 
     
 
    
-class TopicRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateAPIView):
+class TopicRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
     permission_classes = (permissions.IsAuthenticated,)
@@ -25,9 +25,10 @@ class TopicRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateAPIView):
     def post(self, request, *args, **kwargs):
         topic = self.get_object()
         user = request.user
-        UserTopic.objects.create(user=user, topic = topic)
+        usertopic = UserTopic.objects.create(user=user, topic = topic)
+        serializer = UserTopicSerializer(usertopic)
 
-        return Response({'message': 'UserTopic object created successfully'})
+        return Response(serializer.data)
 
 
 class PostCreateAPIView(generics.ListCreateAPIView):

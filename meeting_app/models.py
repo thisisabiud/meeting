@@ -8,9 +8,7 @@ class Topic(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField()
     is_favourite = models.BooleanField(default=False)
-
-    # progress = models.IntegerField(default=0)
-
+    
     def __str__(self) -> str:
         return f"{ self.title }"
 
@@ -45,3 +43,6 @@ class UserTopic(models.Model):
 
     def __str__(self) -> str:
         return f"{ self.user } - { self.topic } at { self.progress }"
+
+    class Meta:
+        unique_together = ['user','topic']

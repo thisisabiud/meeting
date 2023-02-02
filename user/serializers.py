@@ -5,14 +5,20 @@ from django.contrib.auth import get_user_model, authenticate
 
 from .models import Profile
 
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['photo']
 
 class UserSerializer(serializers.ModelSerializer):
     """User serializer class"""
+    profile = ProfileSerializer()
     password = serializers.CharField(write_only = True)
 
     def create(self, validated_data):
         """Create user using validated data"""
-        # return get_user_model().objects.create_user(validated_data)
+        profile_data = validated_data.pop('profile')
+
         user = get_user_model().objects.create(
             first_name = validated_data['first_name'],
             last_name = validated_data['last_name'],
@@ -20,7 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
-
+        Profile.objects.create(user=user, **profile_data)
         return user
 
     def update(self, instance, validated_data):
@@ -38,7 +44,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('first_name', 'last_name','fullname', 'email', 'password')
+        fields = ('first_name', 'last_name','fullname', 'email','profile', 'password')
         extra_kwargs = {'password':{'write_only':True, 'min_length':8}}
 
 
@@ -67,7 +73,3 @@ class AuthTokenSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
 
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ('id', 'user', 'photo')
